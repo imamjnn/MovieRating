@@ -3,12 +3,12 @@ import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
 import React from 'react';
 import {Dimensions, ImageBackground, StyleSheet, View} from 'react-native';
-import {GestureHandlerRootView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
-import {NowPlayingMovieResults} from '../home.types';
+import {MovieListResults} from '../home.types';
 
 type CarousalMovieProps = {
-  data: NowPlayingMovieResults[];
+  data: MovieListResults[];
   onPressItem: () => void;
 };
 
@@ -16,7 +16,7 @@ const screenWidth = Dimensions.get('screen').width;
 
 const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       {data.length !== 0 ? (
         <Carousel
           width={screenWidth}
@@ -31,12 +31,11 @@ const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
           // autoPlay={true}
           autoPlayInterval={4000}
           snapEnabled={true}
-          scrollAnimationDuration={300}
           panGestureHandlerProps={{
             activeOffsetX: [-10, 10]
           }}
           // pagingEnabled={true}
-          renderItem={({item: props}: {item: NowPlayingMovieResults}) => (
+          renderItem={({item: props}: {item: MovieListResults}) => (
             <TouchableWithoutFeedback key={props.id} onPress={onPressItem} style={styles.item}>
               <ImageBackground
                 source={{uri: `${IMG_HOST}${props.backdrop_path}`}}
@@ -52,7 +51,7 @@ const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
           )}
         />
       ) : null}
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

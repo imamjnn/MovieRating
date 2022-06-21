@@ -9,5 +9,7 @@ export const endpoint = {
   topRatedMovie: '/movie/top_rated',
   upcomingMovie: '/movie/upcoming',
   searchMovie: '/search/movie',
-  movie: '/movie'
+  movie: '/movie',
+  providerMovie: '/watch/providers/movie',
+  popularMovie: '/movie/popular'
 };
