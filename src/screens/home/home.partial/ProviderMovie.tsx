@@ -4,6 +4,8 @@ import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
 import React from 'react';
 import {FlatList, Image, Pressable, StyleSheet, View} from 'react-native';
+import {useRecoilValue} from 'recoil';
+import {themeState} from '../../setting/setting.model';
 import {ProviderMovieResults} from '../home.types';
 
 type ProviderMovieProps = {
@@ -12,10 +14,11 @@ type ProviderMovieProps = {
 };
 
 const ProviderMovie = ({data, onPressItem}: ProviderMovieProps) => {
+  const theme = useRecoilValue(themeState);
   return (
     <View style={styles.container}>
       <View style={styles.wrapTitle}>
-        <Text>Watch Movie Providers in Indo</Text>
+        <Text color={theme.text}>Watch Movie Providers in Indo</Text>
       </View>
       <FlatList
         keyExtractor={item => item.provider_id.toString()}

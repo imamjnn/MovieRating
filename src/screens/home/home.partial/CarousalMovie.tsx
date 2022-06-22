@@ -34,12 +34,11 @@ const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
           panGestureHandlerProps={{
             activeOffsetX: [-10, 10]
           }}
-          // pagingEnabled={true}
+          style={{backgroundColor: colors.black}}
           renderItem={({item: props}: {item: MovieListResults}) => (
             <TouchableWithoutFeedback key={props.id} onPress={onPressItem} style={styles.item}>
               <ImageBackground
                 source={{uri: `${IMG_HOST}${props.backdrop_path}`}}
-                resizeMode="contain"
                 imageStyle={styles.imgBg}>
                 <View style={styles.titleWrap}>
                   <Text color={colors.white} style={styles.titleText}>

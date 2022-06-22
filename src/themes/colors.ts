@@ -18,3 +18,21 @@ export default {
   black: '#000000',
   blackDim: 'rgba(0,0,0,0.5)'
 };
+
+export const light = {
+  isDark: false,
+  text: '#0a0a0a',
+  background: '#ffffff',
+  background2: '#0d47a1',
+  foreground: '#f6f6f6',
+  placeholder: '#9E9E9E'
+};
+
+export const dark = {
+  isDark: true,
+  text: '#fafafa',
+  background: '#121212',
+  background2: '#212121',
+  foreground: '#212121',
+  placeholder: '#bdbdbd'
+};

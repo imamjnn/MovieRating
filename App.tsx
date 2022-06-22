@@ -8,11 +8,13 @@
  * @format
  */
 
-import React from 'react';
+import React, {Suspense} from 'react';
 import {RecoilRoot} from 'recoil';
 import {AppNavigation} from '@navigation/AppNavigation';
 import {NavigationContainer} from '@react-navigation/native';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {ActivityIndicator, View} from 'react-native';
+import globalStyles from './src/themes/globalStyles';
 
 const queryClient = new QueryClient();
 
@@ -22,14 +24,22 @@ if (__DEV__) {
   });
 }
 
+const Loading = () => (
+  <View style={globalStyles.centerView}>
+    <ActivityIndicator size="large" />
+  </View>
+);
+
 const App = () => {
   return (
     <RecoilRoot>
-      <NavigationContainer>
-        <QueryClientProvider client={queryClient}>
-          <AppNavigation />
-        </QueryClientProvider>
-      </NavigationContainer>
+      <Suspense fallback={<Loading />}>
+        <NavigationContainer>
+          <QueryClientProvider client={queryClient}>
+            <AppNavigation />
+          </QueryClientProvider>
+        </NavigationContainer>
+      </Suspense>
     </RecoilRoot>
   );
 };

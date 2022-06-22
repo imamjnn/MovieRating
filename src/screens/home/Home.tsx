@@ -18,9 +18,13 @@ import PopularPeople from './home.partial/PopularPeople';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {ScrollView} from 'react-native';
 import homeStyles from './home.styles';
+import {useRecoilValue} from 'recoil';
+import {themeState} from '../setting/setting.model';
 
 const Home = () => {
   const navigation = useNavigation<AppNavigationProps>();
+
+  const theme = useRecoilValue(themeState);
 
   const [data, setData] = useState<MovieListResults[]>([]);
   const [dataTrending, setDataTrending] = useState<MovieListResults[]>([]);
@@ -79,7 +83,7 @@ const Home = () => {
   };
 
   return (
-    <GestureHandlerRootView style={homeStyles.container}>
+    <GestureHandlerRootView style={[homeStyles.container, {backgroundColor: theme.background}]}>
       <ScrollView>
         <CarousalMovie data={data} onPressItem={() => navigation.navigate('ExampleNavigation')} />
         <ProviderMovie

@@ -5,6 +5,8 @@ import {colors} from '@root/src/themes';
 import React from 'react';
 import {FlatList, ImageBackground, Pressable, StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useRecoilValue} from 'recoil';
+import {themeState} from '../../setting/setting.model';
 import {MovieListResults} from '../home.types';
 
 type GroupedMovieProps = {
@@ -15,12 +17,13 @@ type GroupedMovieProps = {
 };
 
 const GroupedMovie = ({title = 'Grouped', data, onPressItem, onPressMore}: GroupedMovieProps) => {
+  const theme = useRecoilValue(themeState);
   return (
     <View style={styles.container}>
       <View style={styles.wrapTitle}>
-        <Text>{title}</Text>
+        <Text color={theme.text}>{title}</Text>
         <TouchableOpacity onPress={onPressMore}>
-          <Text>More</Text>
+          <Text color={theme.text}>More</Text>
         </TouchableOpacity>
       </View>
       <FlatList
@@ -40,7 +43,7 @@ const GroupedMovie = ({title = 'Grouped', data, onPressItem, onPressMore}: Group
                 </Text>
               </View>
             </ImageBackground>
-            <Text numberOfLines={1} style={{fontSize: 11}}>
+            <Text color={theme.text} numberOfLines={1} style={{fontSize: 11}}>
               {item.title}
             </Text>
           </Pressable>
