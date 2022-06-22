@@ -5,13 +5,18 @@ import {
 } from '@react-navigation/native-stack';
 import {fontFamily} from '../components/text/text.typography';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useRecoilValue} from 'recoil';
+import {themeState} from '../screens/setting/setting.model';
+import {colors} from '../themes';
+import {Icon} from '../components';
 
 // App Navigation
-import Home from '@screens/home/Home';
+import AppIntro from '@screens/AppIntro';
+import DetailMovie from '@screens/home/detailMovie/DetailMovie';
 
 export type AppNavigationParams = {
-  Home: undefined;
-  ExampleNavigation: undefined;
+  AppIntro: undefined;
+  DetailMovie: undefined;
   DashboardTabNavigator: undefined;
 };
 
@@ -19,29 +24,24 @@ const Stack = createNativeStackNavigator<AppNavigationParams>();
 
 export const AppNavigation = () => (
   <Stack.Navigator
-    screenOptions={{headerTitleStyle: {fontFamily: fontFamily.fw500}, headerBackTitle: ''}}>
+    screenOptions={{headerTitleStyle: {fontFamily: fontFamily.fw500}, headerBackTitle: ''}}
+    initialRouteName="AppIntro">
+    <Stack.Screen name="AppIntro" component={AppIntro} options={{headerShown: false}} />
     <Stack.Screen
       name="DashboardTabNavigator"
       component={DashboardTabNavigator}
       options={{headerShown: false}}
     />
-    <Stack.Screen
-      name="ExampleNavigation"
-      component={ExampleNavigation}
-      options={{headerShown: false}}
-    />
+    <Stack.Screen name="DetailMovie" component={DetailMovie} />
   </Stack.Navigator>
 );
 
 export type AppNavigationProps = NativeStackNavigationProp<AppNavigationParams>;
 // End App Navigation
 
-/**
- * Dashboard
- */
+// Tabs Navigation
+import Home from '@screens/home/Home';
 import Setting from '../screens/setting/Setting';
-import {colors} from '../themes';
-import {Icon} from '../components';
 
 export type DashboardTabParams = {
   Home: undefined;
@@ -83,36 +83,4 @@ const DashboardTabNavigator = () => {
     </DashboardTab.Navigator>
   );
 };
-
-// Example Navigation
-import ExComponents from '@screens/example/ExComponents';
-import ExRecoil from '@screens/example/ExRecoil';
-import Example from '@screens/example/Example';
-import CoinGecko from '@screens/example/coinGecko/CoinGecko';
-import {useRecoilValue} from 'recoil';
-import {themeState} from '../screens/setting/setting.model';
-
-export type ExampleNavigationParams = {
-  Example: undefined;
-  ExComponents: undefined;
-  ExRecoil: undefined;
-  CoinGecko: undefined;
-};
-
-const ExStack = createNativeStackNavigator<ExampleNavigationParams>();
-
-export const ExampleNavigation = () => (
-  <ExStack.Navigator
-    screenOptions={{
-      headerTitleStyle: {fontFamily: fontFamily.fw500},
-      headerBackTitle: ''
-    }}>
-    <ExStack.Screen name="Example" component={Example} />
-    <ExStack.Screen name="ExComponents" component={ExComponents} />
-    <ExStack.Screen name="ExRecoil" component={ExRecoil} />
-    <ExStack.Screen name="CoinGecko" component={CoinGecko} />
-  </ExStack.Navigator>
-);
-
-export type ExampleNavigationProps = NativeStackNavigationProp<ExampleNavigationParams>;
-// End Example Navigation
+// Tabs Navigation

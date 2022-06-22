@@ -20,7 +20,8 @@ module.exports = {
           '@themes': './src/themes',
           '@services': './src/services',
           '@utils': './src/utils',
-          '@navigation': './src/navigation'
+          '@navigation': './src/navigation',
+          '@hooks': './src/hooks'
         }
       }
     ],

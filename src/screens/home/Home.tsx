@@ -85,26 +85,23 @@ const Home = () => {
   return (
     <GestureHandlerRootView style={[homeStyles.container, {backgroundColor: theme.background}]}>
       <ScrollView>
-        <CarousalMovie data={data} onPressItem={() => navigation.navigate('ExampleNavigation')} />
-        <ProviderMovie
-          data={dataProvider}
-          onPressItem={() => navigation.navigate('ExampleNavigation')}
-        />
+        <CarousalMovie data={data} onPressItem={() => navigation.navigate('DetailMovie')} />
+        <ProviderMovie data={dataProvider} onPressItem={() => navigation.navigate('DetailMovie')} />
         <GroupedMovie
           title="Trending"
           data={dataTrending}
-          onPressItem={() => navigation.navigate('ExampleNavigation')}
+          onPressItem={() => navigation.navigate('DetailMovie')}
         />
         <PopularPeople data={dataPeoplePopular} />
         <GroupedMovie
           title="Most Popular"
           data={dataPopular}
-          onPressItem={() => navigation.navigate('ExampleNavigation')}
+          onPressItem={() => navigation.navigate('DetailMovie')}
         />
         <GroupedMovie
           title="Top Rated"
           data={dataTopRated}
-          onPressItem={() => navigation.navigate('ExampleNavigation')}
+          onPressItem={() => navigation.navigate('DetailMovie')}
         />
       </ScrollView>
     </GestureHandlerRootView>

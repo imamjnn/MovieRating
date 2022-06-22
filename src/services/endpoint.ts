@@ -3,7 +3,7 @@ export const endpoint = {
   markets: '/coins/markets',
   coins: '/coins/',
 
-  trendingMovie: '/trending/all/day',
+  trendingMovie: '/trending/movie/day',
   personPopular: '/person/popular',
   nowPlayingMovie: '/movie/now_playing',
   topRatedMovie: '/movie/top_rated',
