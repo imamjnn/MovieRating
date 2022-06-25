@@ -5,6 +5,8 @@ import React from 'react';
 import {Dimensions, ImageBackground, StyleSheet, View} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import Carousel from 'react-native-reanimated-carousel';
+import {useRecoilValue} from 'recoil';
+import {themeState} from '../../setting/setting.model';
 import {MovieListResults} from '../home.types';
 
 type CarousalMovieProps = {
@@ -15,6 +17,7 @@ type CarousalMovieProps = {
 const screenWidth = Dimensions.get('screen').width;
 
 const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
+  const theme = useRecoilValue(themeState);
   return (
     <View style={styles.container}>
       {data.length !== 0 ? (
@@ -28,15 +31,18 @@ const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
             parallaxScrollingScale: 0.9,
             parallaxScrollingOffset: 50
           }}
-          // autoPlay={true}
+          autoPlay={true}
           autoPlayInterval={4000}
           snapEnabled={true}
           panGestureHandlerProps={{
             activeOffsetX: [-10, 10]
           }}
-          style={{backgroundColor: colors.black}}
+          style={{backgroundColor: theme.background}}
           renderItem={({item: props}: {item: MovieListResults}) => (
-            <TouchableWithoutFeedback key={props.id} onPress={onPressItem} style={styles.item}>
+            <TouchableWithoutFeedback
+              key={props.id}
+              onPress={onPressItem}
+              style={[styles.item, {backgroundColor: theme.background}]}>
               <ImageBackground
                 source={{uri: `${IMG_HOST}${props.backdrop_path}`}}
                 imageStyle={styles.imgBg}>
@@ -61,11 +67,12 @@ const styles = StyleSheet.create({
   item: {
     height: 200,
     width: screenWidth,
-    backgroundColor: colors.grey100
+    borderRadius: 6
   },
   imgBg: {
     height: 200,
-    backgroundColor: colors.grey100
+    backgroundColor: colors.grey100,
+    borderRadius: 6
   },
   titleWrap: {
     height: '100%',

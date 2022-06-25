@@ -5,6 +5,7 @@ import {colors} from '@root/src/themes';
 import React from 'react';
 import {FlatList, ImageBackground, StyleSheet, View} from 'react-native';
 import {PeoplePopularResults} from '../home.types';
+
 type PopularPeopleProps = {
   data: PeoplePopularResults[];
 };

@@ -20,6 +20,7 @@ import {ScrollView} from 'react-native';
 import homeStyles from './home.styles';
 import {useRecoilValue} from 'recoil';
 import {themeState} from '../setting/setting.model';
+import {Header} from '@root/src/components';
 
 const Home = () => {
   const navigation = useNavigation<AppNavigationProps>();
@@ -84,6 +85,7 @@ const Home = () => {
 
   return (
     <GestureHandlerRootView style={[homeStyles.container, {backgroundColor: theme.background}]}>
+      <Header title="Movies" />
       <ScrollView>
         <CarousalMovie data={data} onPressItem={() => navigation.navigate('DetailMovie')} />
         <ProviderMovie data={dataProvider} onPressItem={() => navigation.navigate('DetailMovie')} />
