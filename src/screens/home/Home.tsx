@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
 import * as RNLocalize from 'react-native-localize';
 import {
   fecthNowPlayingMovie,
@@ -8,7 +6,8 @@ import {
   fecthPopularMovie,
   fecthProviderMovie,
   fecthTopRatedMovie,
-  fecthTrendingMovie
+  fecthTrendingMovie,
+  fecthUpcomingMovie
 } from './home.model';
 import {MovieListResults, PeoplePopularResults, ProviderMovieResults} from './home.types';
 import CarousalMovie from './home.partial/CarousalMovie';
@@ -23,8 +22,6 @@ import {themeState} from '../setting/setting.model';
 import {Header} from '@root/src/components';
 
 const Home = () => {
-  const navigation = useNavigation<AppNavigationProps>();
-
   const theme = useRecoilValue(themeState);
 
   const [data, setData] = useState<MovieListResults[]>([]);
@@ -33,6 +30,7 @@ const Home = () => {
   const [dataTopRated, setDataTopRated] = useState<MovieListResults[]>([]);
   const [dataProvider, setDataProvider] = useState<ProviderMovieResults[]>([]);
   const [dataPeoplePopular, setDataPeoplePopular] = useState<PeoplePopularResults[]>([]);
+  const [dataUpcoming, setDataUpcoming] = useState<MovieListResults[]>([]);
 
   useEffect(() => {
     console.log(RNLocalize.getCountry());
@@ -43,6 +41,7 @@ const Home = () => {
     loadMoviePopular();
     loadMovieTopRated();
     loadPopularPeople();
+    loadMovieUpcoming();
   }, []);
 
   const loadMovieNowPlaying = async () => {
@@ -82,29 +81,24 @@ const Home = () => {
       setDataPeoplePopular(response.results);
     }
   };
+  const loadMovieUpcoming = async () => {
+    const response = await fecthUpcomingMovie();
+    if (response) {
+      setDataUpcoming(response.results);
+    }
+  };
 
   return (
     <GestureHandlerRootView style={[homeStyles.container, {backgroundColor: theme.background}]}>
       <Header title="Movies" />
       <ScrollView>
-        <CarousalMovie data={data} onPressItem={() => navigation.navigate('DetailMovie')} />
-        <ProviderMovie data={dataProvider} onPressItem={() => navigation.navigate('DetailMovie')} />
-        <GroupedMovie
-          title="Trending"
-          data={dataTrending}
-          onPressItem={() => navigation.navigate('DetailMovie')}
-        />
+        <CarousalMovie data={data} />
+        <ProviderMovie data={dataProvider} />
+        <GroupedMovie title="Trending" data={dataTrending} />
         <PopularPeople data={dataPeoplePopular} />
-        <GroupedMovie
-          title="Most Popular"
-          data={dataPopular}
-          onPressItem={() => navigation.navigate('DetailMovie')}
-        />
-        <GroupedMovie
-          title="Top Rated"
-          data={dataTopRated}
-          onPressItem={() => navigation.navigate('DetailMovie')}
-        />
+        <GroupedMovie title="Most Popular" data={dataPopular} />
+        <GroupedMovie title="Top Rated" data={dataTopRated} />
+        <GroupedMovie title="Upcoming" data={dataUpcoming} />
       </ScrollView>
     </GestureHandlerRootView>
   );

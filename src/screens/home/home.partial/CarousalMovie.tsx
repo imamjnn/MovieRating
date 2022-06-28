@@ -1,4 +1,6 @@
+import {useNavigation} from '@react-navigation/native';
 import {Text} from '@root/src/components';
+import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
 import React from 'react';
@@ -11,13 +13,14 @@ import {MovieListResults} from '../home.types';
 
 type CarousalMovieProps = {
   data: MovieListResults[];
-  onPressItem: () => void;
 };
 
 const screenWidth = Dimensions.get('screen').width;
 
-const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
+const CarousalMovie = ({data}: CarousalMovieProps) => {
   const theme = useRecoilValue(themeState);
+  const navigation = useNavigation<AppNavigationProps>();
+
   return (
     <View style={styles.container}>
       {data.length !== 0 ? (
@@ -41,7 +44,7 @@ const CarousalMovie = ({data, onPressItem}: CarousalMovieProps) => {
           renderItem={({item: props}: {item: MovieListResults}) => (
             <TouchableWithoutFeedback
               key={props.id}
-              onPress={onPressItem}
+              onPress={() => navigation.navigate('DetailMovie', {id: props.id})}
               style={[styles.item, {backgroundColor: theme.background}]}>
               <ImageBackground
                 source={{uri: `${IMG_HOST}${props.backdrop_path}`}}

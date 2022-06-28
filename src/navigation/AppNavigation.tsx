@@ -13,11 +13,17 @@ import {Icon} from '../components';
 // App Navigation
 import AppIntro from '@screens/AppIntro';
 import DetailMovie from '@screens/home/detailMovie/DetailMovie';
+import MovieBy from '@screens/home/movieBy/MovieBy';
 
 export type AppNavigationParams = {
   AppIntro: undefined;
-  DetailMovie: undefined;
   DashboardTabNavigator: undefined;
+  DetailMovie: {
+    id: number;
+  };
+  MovieBy: {
+    id: number;
+  };
 };
 
 const Stack = createNativeStackNavigator<AppNavigationParams>();
@@ -32,7 +38,8 @@ export const AppNavigation = () => (
       component={DashboardTabNavigator}
       options={{headerShown: false}}
     />
-    <Stack.Screen name="DetailMovie" component={DetailMovie} />
+    <Stack.Screen name="DetailMovie" component={DetailMovie} options={{headerShown: false}} />
+    <Stack.Screen name="MovieBy" component={MovieBy} options={{headerShown: true}} />
   </Stack.Navigator>
 );
 

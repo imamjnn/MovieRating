@@ -1,5 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
+import {useNavigation} from '@react-navigation/native';
 import {Text} from '@root/src/components';
+import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
 import React from 'react';
@@ -12,12 +14,13 @@ import {MovieListResults} from '../home.types';
 type GroupedMovieProps = {
   title: string;
   data: MovieListResults[];
-  onPressItem: () => void;
   onPressMore?: () => void;
 };
 
-const GroupedMovie = ({title = 'Grouped', data, onPressItem, onPressMore}: GroupedMovieProps) => {
+const GroupedMovie = ({title = 'Grouped', data, onPressMore}: GroupedMovieProps) => {
   const theme = useRecoilValue(themeState);
+  const navigation = useNavigation<AppNavigationProps>();
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapTitle}>
@@ -32,7 +35,9 @@ const GroupedMovie = ({title = 'Grouped', data, onPressItem, onPressMore}: Group
         horizontal
         contentContainerStyle={{paddingLeft: 6, height: 140}}
         renderItem={({item}) => (
-          <Pressable onPress={onPressItem} style={styles.item}>
+          <Pressable
+            onPress={() => navigation.navigate('DetailMovie', {id: item.id})}
+            style={styles.item}>
             <ImageBackground
               source={{uri: `${IMG_HOST}${item.poster_path}`}}
               style={styles.imgBg}

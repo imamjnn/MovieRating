@@ -10,10 +10,9 @@ import {ProviderMovieResults} from '../home.types';
 
 type ProviderMovieProps = {
   data: ProviderMovieResults[];
-  onPressItem: () => void;
 };
 
-const ProviderMovie = ({data, onPressItem}: ProviderMovieProps) => {
+const ProviderMovie = ({data}: ProviderMovieProps) => {
   const theme = useRecoilValue(themeState);
   return (
     <View style={styles.container}>
@@ -26,7 +25,7 @@ const ProviderMovie = ({data, onPressItem}: ProviderMovieProps) => {
         horizontal
         contentContainerStyle={{paddingLeft: 6, height: 80}}
         renderItem={({item}) => (
-          <Pressable onPress={onPressItem} style={styles.item}>
+          <Pressable style={styles.item}>
             <Image source={{uri: `${IMG_HOST}${item.logo_path}`}} style={styles.imgBg} />
           </Pressable>
         )}

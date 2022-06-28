@@ -98,6 +98,25 @@ export const fecthTopRatedMovie = async () => {
   }
 };
 
+export const fecthUpcomingMovie = async () => {
+  try {
+    const response = await axios.get<MovieListResponse>(
+      `${HOST}${endpoint.upcomingMovie}?api_key=${API_KEY}&language=id-ID`
+    );
+    if (response.status === 200 && response.data !== null) {
+      return response.data;
+    }
+
+    return null;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      return null;
+    }
+
+    return null;
+  }
+};
+
 export const fecthPeoplePopular = async () => {
   try {
     const response = await axios.get<PeoplePopularResponse>(

@@ -4,6 +4,7 @@ export default {
   background: '#f6f6f6',
   error: '#B00020',
   warning: '#FFC064',
+  success: '#4BB543',
   text: '#000000',
   disabled: '#C4CBD1',
   placeholder: '#9E9E9E',
@@ -16,7 +17,9 @@ export default {
   grey600: '#757575',
   white: '#ffffff',
   black: '#000000',
-  blackDim: 'rgba(0,0,0,0.5)'
+  blackDim: 'rgba(0,0,0,0.5)',
+  darkOrange: '#bc5100',
+  darkGreen: '#1b5e20'
 };
 
 export const light = {
