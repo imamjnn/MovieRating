@@ -13,7 +13,7 @@ import {MovieListResults} from '../home.types';
 
 type GroupedMovieProps = {
   title: string;
-  data: MovieListResults[];
+  data: MovieListResults[] | undefined;
   onPressMore?: () => void;
 };
 

@@ -9,12 +9,12 @@ import {MovieVideoResults} from '../detailMovie.types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type MovieVideosProps = {
-  data: MovieVideoResults[];
+  data: MovieVideoResults[] | undefined;
 };
 
 const MovieVideos = ({data}: MovieVideosProps) => {
   const theme = useRecoilValue(themeState);
-  if (data.length === 0) {
+  if (data && data.length === 0) {
     return null;
   }
   return (

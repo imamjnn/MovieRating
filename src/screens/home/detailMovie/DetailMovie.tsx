@@ -4,34 +4,28 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import {LoadingView, Text} from '@root/src/components';
 import {AppNavigationParams} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Animated, Image, ImageBackground, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {themeState} from '../../setting/setting.model';
 import {
-  fecthDetailMovie,
   fecthMovieCast,
   fecthMovieVideos,
   fecthSimilarMovie,
-  fecthWatchProviderMovie
+  fecthWatchProviderMovie,
+  useLoadDetailMovie
 } from './detailMovie.model';
-import {
-  DetailMovieData,
-  MovieCastResults,
-  MovieVideoResults,
-  WatchProviderMovieResults
-} from './detailMovie.types';
 import {Chip} from 'react-native-ui-lib';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '@root/src/themes';
 import WatchProvider from './detailMovie.partial/WatchProvider';
 import {deviceLocalize} from '@root/src/utils/models';
 import MovieGenreList from './detailMovie.partial/MovieGenreList';
-import {MovieListResults} from '../home.types';
 import GroupedMovie from '../home.partial/GroupedMovie';
 import MovieCast from './detailMovie.partial/MovieCast';
 import MovieVideos from './detailMovie.partial/MovieVideos';
 import MoreDetail from './detailMovie.partial/MoreDetail';
+import detailMovieStyles from './detailMovie.styles';
 
 type DetailMovieRouteProps = RouteProp<AppNavigationParams, 'DetailMovie'>;
 
@@ -40,13 +34,6 @@ const Setting = () => {
   const localize = useRecoilValue(deviceLocalize);
   const {params} = useRoute<DetailMovieRouteProps>();
 
-  const [data, setData] = useState<DetailMovieData | null>(null);
-  const [dataProviderMovie, setDataProviderMovie] = useState<WatchProviderMovieResults[]>([]);
-  const [dataCastMovie, setDataCastMovie] = useState<MovieCastResults[]>([]);
-  const [dataVideosMovie, setDataVideosMovie] = useState<MovieVideoResults[]>([]);
-  const [dataSimilarMovie, setDataSimilarMovie] = useState<MovieListResults[]>([]);
-  const [loadingDetail, setLoadingDetail] = useState(true);
-
   const yOffset = useRef(new Animated.Value(0)).current;
   const headerOpacity = yOffset.interpolate({
     inputRange: [0, 200],
@@ -54,65 +41,32 @@ const Setting = () => {
     extrapolate: 'clamp'
   });
 
+  const detailMovie = useLoadDetailMovie(params.id);
+  const watchProvider = fecthWatchProviderMovie(params.id);
+  const movieCast = fecthMovieCast(params.id);
+  const movieVideo = fecthMovieVideos(params.id);
+  const movieSimilar = fecthSimilarMovie(params.id);
+
   useEffect(() => {
     console.log('Detail Movie');
-    loadDetailMovie();
-    loadProviderMovie();
-    loadCastMovie();
-    loadVideosMovie();
-    loadSimilarMovie();
+    detailMovie.reload();
+    watchProvider.reload();
+    movieCast.reload();
+    movieVideo.reload();
+    movieSimilar.reload();
   }, []);
 
-  const loadDetailMovie = async () => {
-    const response = await fecthDetailMovie(params.id);
-    setLoadingDetail(false);
-    if (response) {
-      setData(response);
-    }
-  };
+  const watchProviderData =
+    watchProvider.data?.results[localize.countryCode] &&
+    watchProvider.data?.results[localize.countryCode].flatrate
+      ? watchProvider.data?.results[localize.countryCode].flatrate
+      : [];
 
-  const loadProviderMovie = async () => {
-    const response = await fecthWatchProviderMovie(params.id);
-    if (response) {
-      if (response.results[localize.countryCode]) {
-        setDataProviderMovie(
-          response?.results[localize.countryCode].flatrate
-            ? response?.results[localize.countryCode].flatrate
-            : response?.results[localize.countryCode].buy
-        );
-      }
-    }
-  };
-
-  const loadCastMovie = async () => {
-    const response = await fecthMovieCast(params.id);
-    setLoadingDetail(false);
-    if (response) {
-      setDataCastMovie(response.cast);
-    }
-  };
-
-  const loadVideosMovie = async () => {
-    const response = await fecthMovieVideos(params.id);
-    setLoadingDetail(false);
-    if (response) {
-      setDataVideosMovie(response.results);
-    }
-  };
-
-  const loadSimilarMovie = async () => {
-    const response = await fecthSimilarMovie(params.id);
-    setLoadingDetail(false);
-    if (response) {
-      setDataSimilarMovie(response.results);
-    }
-  };
-
-  if (loadingDetail) {
+  if (detailMovie.isLoading) {
     return <LoadingView />;
   }
 
-  if (!data) {
+  if (!detailMovie.data) {
     return (
       <View>
         <Text>Empty</Text>
@@ -123,19 +77,15 @@ const Setting = () => {
   return (
     <View style={{flex: 1, backgroundColor: theme.background}}>
       <Animated.View
-        style={{
-          opacity: headerOpacity,
-          backgroundColor: theme.background,
-          position: 'absolute',
-          top: 0,
-          zIndex: 1,
-          height: 50,
-          width: '100%',
-          padding: 10,
-          justifyContent: 'center'
-        }}>
+        style={[
+          detailMovieStyles.header,
+          {
+            opacity: headerOpacity,
+            backgroundColor: theme.background
+          }
+        ]}>
         <Text color={theme.text} center style={{fontSize: 18, fontWeight: 'bold'}}>
-          {data?.title}
+          {detailMovie.data.title}
         </Text>
       </Animated.View>
       <Animated.ScrollView
@@ -154,7 +104,7 @@ const Setting = () => {
         )}
         scrollEventThrottle={16}>
         <ImageBackground
-          source={{uri: `${IMG_HOST}${data?.backdrop_path}`}}
+          source={{uri: `${IMG_HOST}${detailMovie.data.backdrop_path}`}}
           imageStyle={{
             height: 200,
             width: '100%'
@@ -168,17 +118,17 @@ const Setting = () => {
         <View style={{marginTop: -50, flexDirection: 'row'}}>
           <View style={{width: '30%', paddingLeft: 10}}>
             <Image
-              source={{uri: `${IMG_HOST}${data?.poster_path}`}}
+              source={{uri: `${IMG_HOST}${detailMovie.data.poster_path}`}}
               style={{height: 160, width: 100}}
             />
           </View>
           <View style={{paddingTop: 50, padding: 6, width: '70%'}}>
             <Text color={theme.text} style={{fontSize: 18, fontWeight: '800'}} paddingVertical={6}>
-              {data?.title}
+              {detailMovie.data.title}
             </Text>
             <View style={{flexDirection: 'row'}}>
               <Chip
-                label={String(`${data?.vote_average} / ${data?.vote_count}`)}
+                label={String(`${detailMovie.data.vote_average} / ${detailMovie.data.vote_count}`)}
                 labelStyle={{color: theme.text, fontWeight: 'bold'}}
                 leftElement={
                   <Icon name="star" size={16} color={colors.warning} style={{paddingLeft: 6}} />
@@ -187,7 +137,7 @@ const Setting = () => {
                 borderRadius={6}
               />
               <Chip
-                label={String(data?.release_date)}
+                label={String(detailMovie.data.release_date)}
                 labelStyle={{color: theme.text}}
                 leftElement={
                   <Icon
@@ -201,21 +151,21 @@ const Setting = () => {
                 borderRadius={6}
               />
             </View>
-            <MovieGenreList data={data.genres} />
+            <MovieGenreList data={detailMovie.data.genres} />
           </View>
         </View>
         <View style={{padding: 10}}>
-          <Text color={theme.text}>{data?.overview}</Text>
+          <Text color={theme.text}>{detailMovie.data.overview}</Text>
         </View>
-        <WatchProvider data={dataProviderMovie} />
-        <MovieCast data={dataCastMovie} />
+        <WatchProvider data={watchProviderData} />
+        <MovieCast data={movieCast.data?.cast} />
         <MoreDetail
-          revenue={data.revenue}
-          budget={data.budget}
-          prodCompanies={data.production_companies}
+          revenue={detailMovie.data.revenue}
+          budget={detailMovie.data.budget}
+          prodCompanies={detailMovie.data.production_companies}
         />
-        <MovieVideos data={dataVideosMovie} />
-        <GroupedMovie title="Similar Movie" data={dataSimilarMovie} />
+        <MovieVideos data={movieVideo.data?.results} />
+        <GroupedMovie title="Similar Movie" data={movieSimilar.data?.results} />
       </Animated.ScrollView>
     </View>
   );

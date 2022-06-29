@@ -58,7 +58,8 @@ const MoreDetail = ({prodCompanies, budget, revenue}: MoreDetailProps) => {
                 height: 20,
                 width: 20,
                 borderRadius: 20 / 2,
-                backgroundColor: colors.grey100
+                backgroundColor: colors.grey100,
+                marginRight: 6
               }}
               containerStyle={{marginRight: 10}}
               backgroundColor={theme.background}

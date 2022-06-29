@@ -9,12 +9,12 @@ import {useRecoilValue} from 'recoil';
 import {MovieCastResults} from '../detailMovie.types';
 
 type MovieCastProps = {
-  data: MovieCastResults[];
+  data: MovieCastResults[] | undefined;
 };
 
 const MovieCast = ({data}: MovieCastProps) => {
   const theme = useRecoilValue(themeState);
-  if (data.length === 0) {
+  if (data && data.length === 0) {
     return null;
   }
   return (
