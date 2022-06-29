@@ -24,7 +24,9 @@ const GroupedMovie = ({title = 'Grouped', data, onPressMore}: GroupedMovieProps)
   return (
     <View style={styles.container}>
       <View style={styles.wrapTitle}>
-        <Text color={theme.text}>{title}</Text>
+        <Text color={theme.text} style={{fontWeight: 'bold'}}>
+          {title}
+        </Text>
         <TouchableOpacity onPress={onPressMore}>
           <Text color={theme.text}>More</Text>
         </TouchableOpacity>
@@ -33,7 +35,7 @@ const GroupedMovie = ({title = 'Grouped', data, onPressMore}: GroupedMovieProps)
         keyExtractor={item => item.id.toString()}
         data={data}
         horizontal
-        contentContainerStyle={{paddingLeft: 6, height: 140}}
+        contentContainerStyle={{paddingLeft: 10, height: 140}}
         renderItem={({item}) => (
           <Pressable
             onPress={() => navigation.navigate('DetailMovie', {id: item.id})}
@@ -44,7 +46,7 @@ const GroupedMovie = ({title = 'Grouped', data, onPressMore}: GroupedMovieProps)
               imageStyle={styles.imgBg}>
               <View style={styles.wrapVote}>
                 <Text color={colors.grey50} style={{fontSize: 12, fontWeight: 'bold'}}>
-                  {item.vote_average}
+                  {item.vote_average.toFixed(1)}
                 </Text>
               </View>
             </ImageBackground>
@@ -60,7 +62,7 @@ const GroupedMovie = ({title = 'Grouped', data, onPressMore}: GroupedMovieProps)
 
 const styles = StyleSheet.create({
   container: {
-    height: 180,
+    height: 200,
     width: '100%',
     paddingBottom: 10
   },
@@ -79,8 +81,7 @@ const styles = StyleSheet.create({
   wrapTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 6,
-    paddingBottom: 6
+    padding: 10
   },
   wrapVote: {
     borderRadius: 4,

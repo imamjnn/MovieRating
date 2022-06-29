@@ -17,7 +17,9 @@ const ProviderMovie = ({data}: ProviderMovieProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapTitle}>
-        <Text color={theme.text}>Watch Movie Providers in Indo</Text>
+        <Text color={theme.text} style={{fontWeight: 'bold'}}>
+          Watch Movie Providers in Indo
+        </Text>
       </View>
       <FlatList
         keyExtractor={item => item.provider_id.toString()}
@@ -37,8 +39,7 @@ const ProviderMovie = ({data}: ProviderMovieProps) => {
 const styles = StyleSheet.create({
   container: {
     height: 100,
-    width: '100%',
-    paddingTop: 10
+    width: '100%'
   },
   imgBg: {
     height: 50,
@@ -55,8 +56,7 @@ const styles = StyleSheet.create({
   wrapTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 6,
-    paddingBottom: 6
+    padding: 10
   }
 });
 

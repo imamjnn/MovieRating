@@ -1,27 +1,50 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import {LoadingView, Text} from '@root/src/components';
-import {AppNavigationParams, AppNavigationProps} from '@root/src/navigation/AppNavigation';
+import {AppNavigationParams} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, FlatList, Image, ImageBackground, View} from 'react-native';
+import {Animated, Image, ImageBackground, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {themeState} from '../../setting/setting.model';
-import {fecthDetailMovie} from './detailMovie.model';
-import {DetailMovieData} from './detailMovie.types';
+import {
+  fecthDetailMovie,
+  fecthMovieCast,
+  fecthMovieVideos,
+  fecthSimilarMovie,
+  fecthWatchProviderMovie
+} from './detailMovie.model';
+import {
+  DetailMovieData,
+  MovieCastResults,
+  MovieVideoResults,
+  WatchProviderMovieResults
+} from './detailMovie.types';
 import {Chip} from 'react-native-ui-lib';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '@root/src/themes';
+import WatchProvider from './detailMovie.partial/WatchProvider';
+import {deviceLocalize} from '@root/src/utils/models';
+import MovieGenreList from './detailMovie.partial/MovieGenreList';
+import {MovieListResults} from '../home.types';
+import GroupedMovie from '../home.partial/GroupedMovie';
+import MovieCast from './detailMovie.partial/MovieCast';
+import MovieVideos from './detailMovie.partial/MovieVideos';
+import MoreDetail from './detailMovie.partial/MoreDetail';
 
 type DetailMovieRouteProps = RouteProp<AppNavigationParams, 'DetailMovie'>;
 
 const Setting = () => {
   const theme = useRecoilValue(themeState);
+  const localize = useRecoilValue(deviceLocalize);
   const {params} = useRoute<DetailMovieRouteProps>();
-  const navigation = useNavigation<AppNavigationProps>();
 
   const [data, setData] = useState<DetailMovieData | null>(null);
+  const [dataProviderMovie, setDataProviderMovie] = useState<WatchProviderMovieResults[]>([]);
+  const [dataCastMovie, setDataCastMovie] = useState<MovieCastResults[]>([]);
+  const [dataVideosMovie, setDataVideosMovie] = useState<MovieVideoResults[]>([]);
+  const [dataSimilarMovie, setDataSimilarMovie] = useState<MovieListResults[]>([]);
   const [loadingDetail, setLoadingDetail] = useState(true);
 
   const yOffset = useRef(new Animated.Value(0)).current;
@@ -32,14 +55,56 @@ const Setting = () => {
   });
 
   useEffect(() => {
+    console.log('Detail Movie');
     loadDetailMovie();
-  }, [headerOpacity]);
+    loadProviderMovie();
+    loadCastMovie();
+    loadVideosMovie();
+    loadSimilarMovie();
+  }, []);
 
   const loadDetailMovie = async () => {
     const response = await fecthDetailMovie(params.id);
     setLoadingDetail(false);
     if (response) {
       setData(response);
+    }
+  };
+
+  const loadProviderMovie = async () => {
+    const response = await fecthWatchProviderMovie(params.id);
+    if (response) {
+      if (response.results[localize.countryCode]) {
+        setDataProviderMovie(
+          response?.results[localize.countryCode].flatrate
+            ? response?.results[localize.countryCode].flatrate
+            : response?.results[localize.countryCode].buy
+        );
+      }
+    }
+  };
+
+  const loadCastMovie = async () => {
+    const response = await fecthMovieCast(params.id);
+    setLoadingDetail(false);
+    if (response) {
+      setDataCastMovie(response.cast);
+    }
+  };
+
+  const loadVideosMovie = async () => {
+    const response = await fecthMovieVideos(params.id);
+    setLoadingDetail(false);
+    if (response) {
+      setDataVideosMovie(response.results);
+    }
+  };
+
+  const loadSimilarMovie = async () => {
+    const response = await fecthSimilarMovie(params.id);
+    setLoadingDetail(false);
+    if (response) {
+      setDataSimilarMovie(response.results);
     }
   };
 
@@ -65,9 +130,13 @@ const Setting = () => {
           top: 0,
           zIndex: 1,
           height: 50,
-          width: '100%'
+          width: '100%',
+          padding: 10,
+          justifyContent: 'center'
         }}>
-        <Text>{data?.title}</Text>
+        <Text color={theme.text} center style={{fontSize: 18, fontWeight: 'bold'}}>
+          {data?.title}
+        </Text>
       </Animated.View>
       <Animated.ScrollView
         style={{zIndex: 0}}
@@ -100,7 +169,7 @@ const Setting = () => {
           <View style={{width: '30%', paddingLeft: 10}}>
             <Image
               source={{uri: `${IMG_HOST}${data?.poster_path}`}}
-              style={{height: 160, width: 110}}
+              style={{height: 160, width: 100}}
             />
           </View>
           <View style={{paddingTop: 50, padding: 6, width: '70%'}}>
@@ -109,97 +178,44 @@ const Setting = () => {
             </Text>
             <View style={{flexDirection: 'row'}}>
               <Chip
-                label={String(data?.vote_average)}
-                labelStyle={{color: theme.text}}
+                label={String(`${data?.vote_average} / ${data?.vote_count}`)}
+                labelStyle={{color: theme.text, fontWeight: 'bold'}}
                 leftElement={
                   <Icon name="star" size={16} color={colors.warning} style={{paddingLeft: 6}} />
                 }
-                // size={{width: 60, height: 10}}
                 containerStyle={{marginRight: 6}}
+                borderRadius={6}
               />
               <Chip
-                label={String(data?.vote_count)}
+                label={String(data?.release_date)}
                 labelStyle={{color: theme.text}}
                 leftElement={
                   <Icon
-                    name="supervised-user-circle"
+                    name="date-range"
                     size={16}
-                    color={colors.warning}
+                    color={colors.primary}
                     style={{paddingLeft: 6}}
                   />
                 }
-                // size={{width: 100, height: 10}}
                 containerStyle={{marginRight: 6}}
-              />
-              <Chip
-                label={String(data?.popularity)}
-                labelStyle={{color: theme.text}}
-                leftElement={
-                  <Icon
-                    name="local-fire-department"
-                    size={16}
-                    color={colors.warning}
-                    style={{paddingLeft: 6}}
-                  />
-                }
-                // size={{width: 100, height: 10}}
-                containerStyle={{marginRight: 6}}
+                borderRadius={6}
               />
             </View>
-            <FlatList
-              keyExtractor={item => item.id.toString()}
-              data={data?.genres}
-              horizontal
-              contentContainerStyle={{
-                // height: 20,
-                marginTop: 6,
-                alignItems: 'center',
-                flexGrow: 1
-              }}
-              renderItem={({item}) => (
-                <Chip
-                  label={item.name}
-                  labelStyle={{color: colors.grey100}}
-                  containerStyle={{marginRight: 6}}
-                  onPress={() => navigation.navigate('MovieBy', {id: item.id})}
-                  backgroundColor={colors.primary}
-                />
-              )}
-            />
+            <MovieGenreList data={data.genres} />
           </View>
         </View>
         <View style={{padding: 10}}>
           <Text color={theme.text}>{data?.overview}</Text>
         </View>
-        <View
-          style={{
-            backgroundColor: data?.status === 'Released' ? colors.darkGreen : colors.darkOrange,
-            elevation: 4
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}>
-            <Icon
-              name={data.status === 'Released' ? 'check-circle' : 'timelapse'}
-              size={16}
-              color={colors.white}
-              style={{paddingLeft: 6}}
-            />
-            <Text color={colors.white}>{data?.status}</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center'
-            }}>
-            <Icon name="date-range" size={16} color={colors.white} style={{paddingLeft: 6}} />
-            <Text color={colors.white}>{data?.release_date}</Text>
-          </View>
-          <Text color={theme.text}>Release Date: {data?.release_date}</Text>
-          <Text color={theme.text}>Budget: {String(data?.budget)}</Text>
-        </View>
+        <WatchProvider data={dataProviderMovie} />
+        <MovieCast data={dataCastMovie} />
+        <MoreDetail
+          revenue={data.revenue}
+          budget={data.budget}
+          prodCompanies={data.production_companies}
+        />
+        <MovieVideos data={dataVideosMovie} />
+        <GroupedMovie title="Similar Movie" data={dataSimilarMovie} />
       </Animated.ScrollView>
     </View>
   );

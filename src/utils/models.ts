@@ -16,7 +16,7 @@ const persistAtom: AtomEffect<any> = ({node, setSelf, onSet}) => {
   });
 };
 
-export const deviceLocalize = atom({
+export const deviceLocalize = atom<DeviceLocalizeParams>({
   key: 'deviceLocalize',
   default: {} as DeviceLocalizeParams,
   effects_UNSTABLE: [persistAtom]
