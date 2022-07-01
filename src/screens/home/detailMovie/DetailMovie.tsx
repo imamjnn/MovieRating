@@ -169,6 +169,7 @@ const Setting = () => {
         <WatchProvider data={watchProviderData} />
         <MovieCast data={movieCast.data?.cast} />
         <MoreDetail
+          isLoading={detailMovie.isLoading}
           revenue={detailMovie.data.revenue}
           budget={detailMovie.data.budget}
           prodCompanies={detailMovie.data.production_companies}

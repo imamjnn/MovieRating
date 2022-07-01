@@ -12,7 +12,7 @@ import {themeState} from '../../setting/setting.model';
 import {MovieListResults} from '../home.types';
 
 type CarousalMovieProps = {
-  data: MovieListResults[];
+  data: MovieListResults[] | undefined;
 };
 
 const screenWidth = Dimensions.get('screen').width;
@@ -23,11 +23,11 @@ const CarousalMovie = ({data}: CarousalMovieProps) => {
 
   return (
     <View style={styles.container}>
-      {data.length !== 0 ? (
+      {data?.length !== 0 ? (
         <Carousel
           width={screenWidth}
           height={screenWidth * 0.6}
-          data={data}
+          data={data ? data : []}
           loop
           mode="parallax"
           modeConfig={{
@@ -41,17 +41,17 @@ const CarousalMovie = ({data}: CarousalMovieProps) => {
             activeOffsetX: [-10, 10]
           }}
           style={{backgroundColor: theme.background}}
-          renderItem={({item: props}: {item: MovieListResults}) => (
+          renderItem={({item}) => (
             <TouchableWithoutFeedback
-              key={props.id}
-              onPress={() => navigation.navigate('DetailMovie', {id: props.id})}
-              style={[styles.item, {backgroundColor: theme.background}]}>
+              key={item.id}
+              onPress={() => navigation.navigate('DetailMovie', {id: item.id})}
+              style={[styles.item, {backgroundColor: theme.foreground}]}>
               <ImageBackground
-                source={{uri: `${IMG_HOST}${props.backdrop_path}`}}
+                source={{uri: `${IMG_HOST}${item.backdrop_path}`}}
                 imageStyle={styles.imgBg}>
                 <View style={styles.titleWrap}>
                   <Text color={colors.white} style={styles.titleText}>
-                    {props.title}
+                    {item.title}
                   </Text>
                 </View>
               </ImageBackground>

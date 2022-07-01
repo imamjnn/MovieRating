@@ -42,8 +42,8 @@ const GroupedMovie = ({title = 'Grouped', data, onPressMore}: GroupedMovieProps)
             style={styles.item}>
             <ImageBackground
               source={{uri: `${IMG_HOST}${item.poster_path}`}}
-              style={styles.imgBg}
-              imageStyle={styles.imgBg}>
+              style={[styles.imgBg, {backgroundColor: theme.foreground}]}
+              imageStyle={[styles.imgBg, {backgroundColor: theme.foreground}]}>
               <View style={styles.wrapVote}>
                 <Text color={colors.grey50} style={{fontSize: 12, fontWeight: 'bold'}}>
                   {item.vote_average.toFixed(1)}
@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
   imgBg: {
     height: 120,
     width: 84,
-    borderRadius: 4,
-    backgroundColor: colors.grey100
+    borderRadius: 4
   },
   item: {
     width: 84,

@@ -1,137 +1,178 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import {API_KEY, HOST} from '@root/src/services/api';
 import {endpoint} from '@root/src/services/endpoint';
 import axios from 'axios';
-import {MovieListResponse, PeoplePopularResponse, ProviderMovieResponse} from './home.types';
+import {useQuery, useQueryClient} from 'react-query';
+import {
+  MovieListData,
+  MovieListResponse,
+  PeoplePopularData,
+  PeoplePopularResponse,
+  ProviderMovieData,
+  ProviderMovieResponse
+} from './home.types';
 
-export const fecthNowPlayingMovie = async () => {
-  try {
-    const response = await axios.get<MovieListResponse>(
-      `${HOST}${endpoint.nowPlayingMovie}?api_key=${API_KEY}&language=en-US&page=1`
-    );
-    if (response.status === 200 && response.data !== null) {
+export const fecthNowPlayingMovie = () => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<MovieListData | null>(
+    ['fetchDetailMovie'],
+    async () => {
+      const response = await axios.get<MovieListResponse>(
+        `${HOST}${endpoint.nowPlayingMovie}?api_key=${API_KEY}&language=en-US&page=1`
+      );
+      if (response?.status !== 200) {
+        return null;
+      }
       return response.data;
-    }
+    },
+    {cacheTime: 0}
+  );
 
-    return null;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
-      return null;
-    }
+  const reload = () => {
+    client.resetQueries(['fetchDetailMovie']);
+  };
 
-    return null;
-  }
+  return {
+    ...rest,
+    reload
+  };
 };
 
-export const fecthTrendingMovie = async () => {
-  try {
+export const fecthTrendingMovie = () => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<MovieListData | null>(['fecthTrendingMovie'], async () => {
     const response = await axios.get<MovieListResponse>(
       `${HOST}${endpoint.trendingMovie}?api_key=${API_KEY}`
     );
-    if (response.status === 200 && response.data !== null) {
-      return response.data;
-    }
-
-    return null;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (response?.status !== 200) {
       return null;
     }
+    return response.data;
+  });
 
-    return null;
-  }
+  const reload = () => {
+    client.resetQueries(['fecthTrendingMovie']);
+  };
+
+  return {
+    ...rest,
+    reload
+  };
 };
 
-export const fecthProviderMovie = async () => {
-  try {
+export const fecthProviderMovie = () => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<ProviderMovieData | null>(['fecthProviderMovie'], async () => {
     const response = await axios.get<ProviderMovieResponse>(
       `${HOST}${endpoint.providerMovie}?api_key=${API_KEY}&language=id-ID&watch_region=ID`
     );
-    if (response.status === 200 && response.data !== null) {
-      return response.data;
-    }
-
-    return null;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (response?.status !== 200) {
       return null;
     }
+    return response.data;
+  });
 
-    return null;
-  }
+  const reload = () => {
+    client.resetQueries(['fecthProviderMovie']);
+  };
+
+  return {
+    ...rest,
+    reload
+  };
 };
 
-export const fecthPopularMovie = async () => {
-  try {
+export const fecthPopularMovie = () => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<MovieListData | null>(['fecthPopularMovie'], async () => {
     const response = await axios.get<MovieListResponse>(
       `${HOST}${endpoint.popularMovie}?api_key=${API_KEY}&language=id-ID`
     );
-    if (response.status === 200 && response.data !== null) {
-      return response.data;
-    }
-
-    return null;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (response?.status !== 200) {
       return null;
     }
+    return response.data;
+  });
 
-    return null;
-  }
+  const reload = () => {
+    client.resetQueries(['fecthPopularMovie']);
+  };
+
+  return {
+    ...rest,
+    reload
+  };
 };
 
-export const fecthTopRatedMovie = async () => {
-  try {
+export const fecthTopRatedMovie = () => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<MovieListData | null>(['fecthTopRatedMovie'], async () => {
     const response = await axios.get<MovieListResponse>(
       `${HOST}${endpoint.topRatedMovie}?api_key=${API_KEY}&language=id-ID`
     );
-    if (response.status === 200 && response.data !== null) {
-      return response.data;
-    }
-
-    return null;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (response?.status !== 200) {
       return null;
     }
+    return response.data;
+  });
 
-    return null;
-  }
+  const reload = () => {
+    client.resetQueries(['fecthTopRatedMovie']);
+  };
+
+  return {
+    ...rest,
+    reload
+  };
 };
 
-export const fecthUpcomingMovie = async () => {
-  try {
+export const fecthUpcomingMovie = () => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<MovieListData | null>(['fecthUpcomingMovie'], async () => {
     const response = await axios.get<MovieListResponse>(
       `${HOST}${endpoint.upcomingMovie}?api_key=${API_KEY}&language=id-ID`
     );
-    if (response.status === 200 && response.data !== null) {
-      return response.data;
-    }
-
-    return null;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (response?.status !== 200) {
       return null;
     }
+    return response.data;
+  });
 
-    return null;
-  }
+  const reload = () => {
+    client.resetQueries(['fecthUpcomingMovie']);
+  };
+
+  return {
+    ...rest,
+    reload
+  };
 };
 
-export const fecthPeoplePopular = async () => {
-  try {
+export const fecthPeoplePopular = () => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<PeoplePopularData | null>(['fecthPeoplePopular'], async () => {
     const response = await axios.get<PeoplePopularResponse>(
       `${HOST}${endpoint.personPopular}?api_key=${API_KEY}&language=id-ID`
     );
-    if (response.status === 200 && response.data !== null) {
-      return response.data;
-    }
-
-    return null;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (response?.status !== 200) {
       return null;
     }
+    return response.data;
+  });
 
-    return null;
-  }
+  const reload = () => {
+    client.resetQueries(['fecthPeoplePopular']);
+  };
+
+  return {
+    ...rest,
+    reload
+  };
 };

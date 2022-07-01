@@ -3,14 +3,17 @@ import {Text} from '@root/src/components';
 import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
 import React from 'react';
-import {FlatList, ImageBackground, StyleSheet, View} from 'react-native';
+import {FlatList, Image, StyleSheet, View} from 'react-native';
+import {useRecoilValue} from 'recoil';
+import {themeState} from '../../setting/setting.model';
 import {PeoplePopularResults} from '../home.types';
 
 type PopularPeopleProps = {
-  data: PeoplePopularResults[];
+  data: PeoplePopularResults[] | undefined;
 };
 
 const PopularPeople = ({data}: PopularPeopleProps) => {
+  const theme = useRecoilValue(themeState);
   return (
     <View style={styles.container}>
       <View style={{padding: 6}}>
@@ -21,14 +24,15 @@ const PopularPeople = ({data}: PopularPeopleProps) => {
         data={data}
         horizontal
         renderItem={({item}) => (
-          <ImageBackground
-            source={{uri: `${IMG_HOST}/${item.profile_path}`}}
-            style={[styles.imgBg, {backgroundColor: colors.grey100}]}
-            imageStyle={styles.imgBg}>
-            <Text color={colors.white} style={styles.nameText}>
+          <View style={styles.item}>
+            <Image
+              source={{uri: `${IMG_HOST}/${item.profile_path}`}}
+              style={[styles.imgBg, {backgroundColor: theme.foreground}]}
+            />
+            <Text color={colors.white} style={styles.nameText} center numberOfLines={2}>
               {item.name}
             </Text>
-          </ImageBackground>
+          </View>
         )}
       />
     </View>
@@ -41,10 +45,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     marginBottom: 10
   },
+  item: {
+    height: 150,
+    width: 80
+  },
   imgBg: {
     height: 120,
     width: 80,
-    backgroundColor: colors.grey100,
     justifyContent: 'flex-end',
     padding: 4
   },

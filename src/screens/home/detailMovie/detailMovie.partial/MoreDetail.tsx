@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import {Text} from '@root/src/components';
+import {LoadingView, Text} from '@root/src/components';
 import {themeState} from '@root/src/screens/setting/setting.model';
 import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
@@ -15,10 +15,16 @@ type MoreDetailProps = {
   budget: number;
   revenue: number;
   prodCompanies: ProductionCompanies[];
+  isLoading: boolean;
 };
 
-const MoreDetail = ({prodCompanies, budget, revenue}: MoreDetailProps) => {
+const MoreDetail = ({prodCompanies, budget, revenue, isLoading = true}: MoreDetailProps) => {
   const theme = useRecoilValue(themeState);
+
+  if (isLoading) {
+    return <LoadingView />;
+  }
+
   return (
     <View style={{backgroundColor: theme.foreground, marginBottom: 10, marginTop: 10}}>
       <View style={styles.wrapItem}>

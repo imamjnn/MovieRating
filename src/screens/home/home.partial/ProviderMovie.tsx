@@ -9,7 +9,7 @@ import {themeState} from '../../setting/setting.model';
 import {ProviderMovieResults} from '../home.types';
 
 type ProviderMovieProps = {
-  data: ProviderMovieResults[];
+  data: ProviderMovieResults[] | undefined;
 };
 
 const ProviderMovie = ({data}: ProviderMovieProps) => {
