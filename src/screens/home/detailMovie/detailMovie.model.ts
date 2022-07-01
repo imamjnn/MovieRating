@@ -15,21 +15,25 @@ import {
   WatchProviderMovieResponse
 } from './detailMovie.types';
 
-export const useLoadDetailMovie = (id: number) => {
+export const fetchDetailMovie = (id: number) => {
   const client = useQueryClient();
 
-  const {...rest} = useQuery<DetailMovieData | null>(['loadDetailMovie'], async () => {
-    const response = await axios.get<DetailMovieResponse>(
-      `${HOST}${endpoint.movie}/${id}?api_key=${API_KEY}&language=en-US`
-    );
-    if (response?.status !== 200) {
-      return null;
-    }
-    return response.data;
-  });
+  const {...rest} = useQuery<DetailMovieData | null>(
+    ['fetchDetailMovie'],
+    async () => {
+      const response = await axios.get<DetailMovieResponse>(
+        `${HOST}${endpoint.movie}/${id}?api_key=${API_KEY}&language=en-US`
+      );
+      if (response?.status !== 200) {
+        return null;
+      }
+      return response.data;
+    },
+    {cacheTime: 0}
+  );
 
   const reload = () => {
-    client.resetQueries(['loadDetailMovie']);
+    client.resetQueries(['fetchDetailMovie']);
   };
 
   return {
@@ -132,41 +136,3 @@ export const fecthSimilarMovie = (id: number) => {
     reload
   };
 };
-
-// export const fecthMovieVideos = async (id: number) => {
-//   try {
-//     const response = await axios.get<MovieVideoResponse>(
-//       `${HOST}${endpoint.movie}/${id}/videos?api_key=${API_KEY}&language=en-US`
-//     );
-//     if (response.status === 200 && response.data !== null) {
-//       return response.data;
-//     }
-
-//     return null;
-//   } catch (e) {
-//     if (axios.isAxiosError(e)) {
-//       return null;
-//     }
-
-//     return null;
-//   }
-// };
-
-// export const fecthSimilarMovie = async (id: number) => {
-//   try {
-//     const response = await axios.get<MovieListResponse>(
-//       `${HOST}${endpoint.movie}/${id}/similar?api_key=${API_KEY}&language=en-US`
-//     );
-//     if (response.status === 200 && response.data !== null) {
-//       return response.data;
-//     }
-
-//     return null;
-//   } catch (e) {
-//     if (axios.isAxiosError(e)) {
-//       return null;
-//     }
-
-//     return null;
-//   }
-// };

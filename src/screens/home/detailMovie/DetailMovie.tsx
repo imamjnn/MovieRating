@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import {RouteProp, useRoute} from '@react-navigation/native';
-import {LoadingView, Text} from '@root/src/components';
+import {Text} from '@root/src/components';
 import {AppNavigationParams} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
 import React, {useEffect, useRef} from 'react';
@@ -13,9 +13,9 @@ import {
   fecthMovieVideos,
   fecthSimilarMovie,
   fecthWatchProviderMovie,
-  useLoadDetailMovie
+  fetchDetailMovie
 } from './detailMovie.model';
-import {Chip} from 'react-native-ui-lib';
+import {Chip, LoaderScreen} from 'react-native-ui-lib';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '@root/src/themes';
 import WatchProvider from './detailMovie.partial/WatchProvider';
@@ -26,6 +26,7 @@ import MovieCast from './detailMovie.partial/MovieCast';
 import MovieVideos from './detailMovie.partial/MovieVideos';
 import MoreDetail from './detailMovie.partial/MoreDetail';
 import detailMovieStyles from './detailMovie.styles';
+import globalStyles from '@root/src/themes/globalStyles';
 
 type DetailMovieRouteProps = RouteProp<AppNavigationParams, 'DetailMovie'>;
 
@@ -41,7 +42,7 @@ const Setting = () => {
     extrapolate: 'clamp'
   });
 
-  const detailMovie = useLoadDetailMovie(params.id);
+  const detailMovie = fetchDetailMovie(params.id);
   const watchProvider = fecthWatchProviderMovie(params.id);
   const movieCast = fecthMovieCast(params.id);
   const movieVideo = fecthMovieVideos(params.id);
@@ -63,13 +64,21 @@ const Setting = () => {
       : [];
 
   if (detailMovie.isLoading) {
-    return <LoadingView />;
+    return (
+      <LoaderScreen
+        message={'Please wait ..'}
+        color={colors.primary}
+        backgroundColor={theme.background}
+        containerStyle={{backgroundColor: theme.background}}
+        messageStyle={{color: theme.text}}
+      />
+    );
   }
 
   if (!detailMovie.data) {
     return (
-      <View>
-        <Text>Empty</Text>
+      <View style={[globalStyles.centerView, {backgroundColor: theme.background}]}>
+        <Text color={theme.text}>Something wrong, please try again later</Text>
       </View>
     );
   }
@@ -119,7 +128,7 @@ const Setting = () => {
           <View style={{width: '30%', paddingLeft: 10}}>
             <Image
               source={{uri: `${IMG_HOST}${detailMovie.data.poster_path}`}}
-              style={{height: 160, width: 100}}
+              style={{height: 160, width: 100, backgroundColor: theme.foreground}}
             />
           </View>
           <View style={{paddingTop: 50, padding: 6, width: '70%'}}>

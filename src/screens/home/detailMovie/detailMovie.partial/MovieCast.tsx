@@ -2,7 +2,6 @@
 import {Text} from '@root/src/components';
 import {themeState} from '@root/src/screens/setting/setting.model';
 import {IMG_HOST} from '@root/src/services/api';
-import {colors} from '@root/src/themes';
 import React from 'react';
 import {FlatList, Image, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
@@ -31,10 +30,10 @@ const MovieCast = ({data}: MovieCastProps) => {
           <View style={styles.item}>
             <Image
               source={{uri: `${IMG_HOST}${item.profile_path}`}}
-              style={styles.imgBg}
+              style={[styles.imgBg, {backgroundColor: theme.foreground}]}
               resizeMode="cover"
             />
-            <Text color={theme.text} style={{fontSize: 11}} center>
+            <Text color={theme.text} style={{fontSize: 11}} center numberOfLines={2}>
               {item.name}
             </Text>
           </View>
@@ -46,15 +45,14 @@ const MovieCast = ({data}: MovieCastProps) => {
 
 const styles = StyleSheet.create({
   item: {
-    height: 110,
+    height: 140,
     width: 80,
     marginRight: 10
   },
   imgBg: {
-    height: 80,
+    height: 100,
     width: 80,
-    borderRadius: 6,
-    backgroundColor: colors.grey100
+    borderRadius: 6
   }
 });
 
