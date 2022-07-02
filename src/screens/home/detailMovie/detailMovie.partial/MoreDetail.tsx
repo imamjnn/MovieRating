@@ -33,14 +33,14 @@ const MoreDetail = ({prodCompanies, budget, revenue, isLoading = true}: MoreDeta
         </Text>
         <View style={{flexDirection: 'row'}}>
           <Chip
-            label={thousandSeparator(budget).toString()}
+            label={String(thousandSeparator(budget))}
             labelStyle={{color: theme.text}}
             backgroundColor={theme.background}
             leftElement={<Icon name="monetization-on" size={20} color={colors.error} />}
             containerStyle={{marginRight: 10}}
           />
           <Chip
-            label={thousandSeparator(revenue).toString()}
+            label={String(thousandSeparator(revenue))}
             labelStyle={{color: theme.text}}
             backgroundColor={theme.background}
             leftElement={<Icon name="monetization-on" size={20} color={colors.darkGreen} />}
@@ -52,7 +52,7 @@ const MoreDetail = ({prodCompanies, budget, revenue, isLoading = true}: MoreDeta
           Production Companies
         </Text>
         <FlatList
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => String(item.id)}
           data={prodCompanies}
           horizontal
           renderItem={({item}) => (

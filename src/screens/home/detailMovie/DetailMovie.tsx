@@ -63,7 +63,7 @@ const Setting = () => {
       ? watchProvider.data?.results[localize.countryCode].flatrate
       : [];
 
-  if (detailMovie.isLoading) {
+  if (detailMovie.isFetching) {
     return (
       <LoaderScreen
         message={'Please wait ..'}

@@ -39,6 +39,12 @@ export type ProviderMovieData = {
 export type ProviderMovieResponse = ResponseAPI<ProviderMovieData>;
 
 // popular pople
+
+export type KnowForParams = {
+  backdrop_path: string;
+  title: string;
+};
+
 export type PeoplePopularResults = {
   gender: number;
   name: string;
@@ -47,6 +53,7 @@ export type PeoplePopularResults = {
   adult: boolean;
   known_for_department: string;
   id: number;
+  known_for: KnowForParams[];
 };
 
 export type PeoplePopularData = {

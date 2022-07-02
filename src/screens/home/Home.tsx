@@ -27,11 +27,11 @@ const Home = () => {
   const theme = useRecoilValue(themeState);
 
   const movieNowPlaying = fecthNowPlayingMovie();
-  const movieTrending = fecthTrendingMovie();
   const movieProvider = fecthProviderMovie();
+  const movieTrending = fecthTrendingMovie();
+  const popularPeople = fecthPeoplePopular();
   const moviePopular = fecthPopularMovie();
   const movieTopRated = fecthTopRatedMovie();
-  const popularPeople = fecthPeoplePopular();
   const movieUpcomming = fecthUpcomingMovie();
 
   useEffect(() => {
