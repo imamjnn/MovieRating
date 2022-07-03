@@ -40,7 +40,7 @@ export const AppNavigation = () => (
     <Stack.Screen
       name="DashboardTabNavigator"
       component={DashboardTabNavigator}
-      options={{headerShown: false}}
+      options={{headerShown: false, animation: 'fade'}}
     />
     <Stack.Screen name="DetailMovie" component={DetailMovie} options={{headerShown: false}} />
     <Stack.Screen name="MovieBy" component={MovieBy} options={{headerShown: true}} />

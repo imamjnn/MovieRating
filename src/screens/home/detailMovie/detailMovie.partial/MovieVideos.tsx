@@ -3,7 +3,7 @@ import {Text} from '@root/src/components';
 import {themeState} from '@root/src/screens/setting/setting.model';
 import {colors} from '@root/src/themes';
 import React from 'react';
-import {FlatList, ImageBackground, StyleSheet, View} from 'react-native';
+import {FlatList, ImageBackground, Linking, Pressable, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {MovieVideoResults} from '../detailMovie.types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -27,12 +27,14 @@ const MovieVideos = ({data}: MovieVideosProps) => {
         horizontal
         contentContainerStyle={{paddingLeft: 10, paddingBottom: 10}}
         renderItem={({item}) => (
-          <ImageBackground
-            source={{uri: `https://img.youtube.com/vi/${item.key}/hqdefault.jpg`}}
-            style={styles.item}
-            imageStyle={styles.imgBg}>
-            <Icon name="play-circle-fill" color={colors.grey100} size={36} />
-          </ImageBackground>
+          <Pressable onPress={() => Linking.openURL(`https://www.youtube.com/watch?v=${item.key}`)}>
+            <ImageBackground
+              source={{uri: `https://img.youtube.com/vi/${item.key}/hqdefault.jpg`}}
+              style={styles.item}
+              imageStyle={styles.imgBg}>
+              <Icon name="play-circle-fill" color={colors.grey100} size={36} />
+            </ImageBackground>
+          </Pressable>
         )}
       />
     </View>

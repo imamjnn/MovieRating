@@ -9,6 +9,8 @@ import {
   DetailMovieResponse,
   MovieCastData,
   MovieCastResponse,
+  MovieCollectionData,
+  MovieCollectionResponse,
   MovieVideoData,
   MovieVideoResponse,
   WatchProviderMovieData,
@@ -129,6 +131,29 @@ export const fecthSimilarMovie = (id: number) => {
 
   const reload = () => {
     client.resetQueries(['fecthSimilarMovie']);
+  };
+
+  return {
+    ...rest,
+    reload
+  };
+};
+
+export const fecthCollectionMovie = (id: number) => {
+  const client = useQueryClient();
+
+  const {...rest} = useQuery<MovieCollectionData | null>(['fecthCollectionMovie'], async () => {
+    const response = await axios.get<MovieCollectionResponse>(
+      `${HOST}${endpoint.collectionMovie}/${id}?api_key=${API_KEY}&language=en-US`
+    );
+    if (response?.status !== 200) {
+      return null;
+    }
+    return response.data;
+  });
+
+  const reload = () => {
+    client.resetQueries(['fecthCollectionMovie']);
   };
 
   return {

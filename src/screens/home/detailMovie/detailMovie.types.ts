@@ -1,3 +1,5 @@
+import {MovieListResults} from '../home.types';
+
 type ResponseAPI<R = any> = Promise<R | null>;
 
 // movie detail
@@ -11,6 +13,13 @@ export type ProductionCompanies = {
 export type Genres = {
   id: number;
   name: string;
+};
+
+export type BelongsToCollection = {
+  id: number;
+  name: string;
+  poster_path: string;
+  backdrop_path: string;
 };
 
 export type DetailMovieData = {
@@ -33,6 +42,7 @@ export type DetailMovieData = {
   vote_average: number;
   vote_count: number;
   status: string;
+  belongs_to_collection: BelongsToCollection;
 };
 
 export type DetailMovieResponse = ResponseAPI<DetailMovieData>;
@@ -91,3 +101,16 @@ export type MovieVideoData = {
 };
 
 export type MovieVideoResponse = ResponseAPI<MovieVideoData>;
+
+// movie collection
+
+export type MovieCollectionData = {
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  backdrop_path: string;
+  parts: MovieListResults[];
+};
+
+export type MovieCollectionResponse = ResponseAPI<MovieCollectionData>;

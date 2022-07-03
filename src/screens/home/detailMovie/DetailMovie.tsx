@@ -4,8 +4,8 @@ import {RouteProp, useRoute} from '@react-navigation/native';
 import {Text} from '@root/src/components';
 import {AppNavigationParams} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
-import React, {useEffect, useRef} from 'react';
-import {Animated, Image, ImageBackground, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Animated, Image, ImageBackground, Pressable, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {themeState} from '../../setting/setting.model';
 import {
@@ -27,6 +27,7 @@ import MovieVideos from './detailMovie.partial/MovieVideos';
 import MoreDetail from './detailMovie.partial/MoreDetail';
 import detailMovieStyles from './detailMovie.styles';
 import globalStyles from '@root/src/themes/globalStyles';
+import MovieCollection from './detailMovie.partial/MovieCollection';
 
 type DetailMovieRouteProps = RouteProp<AppNavigationParams, 'DetailMovie'>;
 
@@ -34,6 +35,8 @@ const Setting = () => {
   const theme = useRecoilValue(themeState);
   const localize = useRecoilValue(deviceLocalize);
   const {params} = useRoute<DetailMovieRouteProps>();
+
+  const [overviewLess, setOverviewLess] = useState(true);
 
   const yOffset = useRef(new Animated.Value(0)).current;
   const headerOpacity = yOffset.interpolate({
@@ -50,11 +53,6 @@ const Setting = () => {
 
   useEffect(() => {
     console.log('Detail Movie');
-    detailMovie.reload();
-    watchProvider.reload();
-    movieCast.reload();
-    movieVideo.reload();
-    movieSimilar.reload();
   }, []);
 
   const watchProviderData =
@@ -146,7 +144,11 @@ const Setting = () => {
                 borderRadius={6}
               />
               <Chip
-                label={String(detailMovie.data.release_date)}
+                label={
+                  detailMovie.data.release_date
+                    ? detailMovie.data.release_date
+                    : detailMovie.data.status
+                }
                 labelStyle={{color: theme.text}}
                 leftElement={
                   <Icon
@@ -164,7 +166,11 @@ const Setting = () => {
           </View>
         </View>
         <View style={{padding: 10}}>
-          <Text color={theme.text}>{detailMovie.data.overview}</Text>
+          <Pressable onPress={() => setOverviewLess(!overviewLess)}>
+            <Text color={theme.text} numberOfLines={overviewLess ? 4 : 0}>
+              {detailMovie.data.overview}
+            </Text>
+          </Pressable>
         </View>
         <WatchProvider data={watchProviderData} />
         <MovieCast data={movieCast.data?.cast} />
@@ -175,6 +181,9 @@ const Setting = () => {
           prodCompanies={detailMovie.data.production_companies}
         />
         <MovieVideos data={movieVideo.data?.results} />
+        {detailMovie.data.belongs_to_collection ? (
+          <MovieCollection collectionId={detailMovie.data.belongs_to_collection.id} />
+        ) : null}
         <GroupedMovie title="Similar Movie" data={movieSimilar.data?.results} />
       </Animated.ScrollView>
     </View>
