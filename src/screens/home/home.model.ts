@@ -15,22 +15,18 @@ import {
 export const fecthNowPlayingMovie = () => {
   const client = useQueryClient();
 
-  const {...rest} = useQuery<MovieListData | null>(
-    ['fetchDetailMovie'],
-    async () => {
-      const response = await axios.get<MovieListResponse>(
-        `${HOST}${endpoint.nowPlayingMovie}?api_key=${API_KEY}&language=en-US&page=1`
-      );
-      if (response?.status !== 200) {
-        return null;
-      }
-      return response.data;
-    },
-    {cacheTime: 0}
-  );
+  const {...rest} = useQuery<MovieListData | null>(['fecthNowPlayingMovie'], async () => {
+    const response = await axios.get<MovieListResponse>(
+      `${HOST}${endpoint.nowPlayingMovie}?api_key=${API_KEY}&language=en-US&page=1`
+    );
+    if (response?.status !== 200) {
+      return null;
+    }
+    return response.data;
+  });
 
   const reload = () => {
-    client.resetQueries(['fetchDetailMovie']);
+    client.resetQueries(['fecthNowPlayingMovie']);
   };
 
   return {

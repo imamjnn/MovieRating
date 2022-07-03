@@ -18,6 +18,8 @@ const TextInput = (props: TextInputProps, ref: any) => {
     iconLeft,
     iconRight,
     secureTextEntry = false,
+    backgroundColor = colors.grey300,
+    textColor = colors.black,
     ...rest
   } = props;
 
@@ -36,7 +38,10 @@ const TextInput = (props: TextInputProps, ref: any) => {
     <View style={{paddingHorizontal, paddingVertical, paddingTop, paddingBottom}}>
       {label !== '' && <Text type="fs12fw400Black">{label}</Text>}
       <View
-        style={[styles.wrapTextInput, {borderColor: onFocus ? colors.primary : colors.grey300}]}>
+        style={[
+          styles.wrapTextInput,
+          {borderColor: onFocus ? colors.primary : colors.grey300, backgroundColor}
+        ]}>
         {iconLeft && <Icon name={iconLeft} size={24} />}
         <NativeTextInput
           ref={ref}
@@ -50,7 +55,8 @@ const TextInput = (props: TextInputProps, ref: any) => {
             {
               paddingLeft: iconLeft ? 0 : 8,
               paddingRight: iconRight ? 0 : 8,
-              width: iconLeft || iconRight || secureTextEntry ? '90%' : '100%'
+              width: iconLeft || iconRight || secureTextEntry ? '90%' : '100%',
+              color: textColor
             }
           ]}
           {...rest}
@@ -73,7 +79,6 @@ const styles = StyleSheet.create({
   wrapTextInput: {
     borderWidth: 1,
     borderRadius: 4,
-    backgroundColor: colors.grey300,
     flexDirection: 'row',
     alignItems: 'center'
   },

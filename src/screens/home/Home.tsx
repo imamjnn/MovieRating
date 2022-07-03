@@ -22,9 +22,12 @@ import {Header, Text} from '@root/src/components';
 import globalStyles from '@root/src/themes/globalStyles';
 import {LoaderScreen} from 'react-native-ui-lib';
 import {colors} from '@root/src/themes';
+import {useNavigation} from '@react-navigation/native';
+import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
 
 const Home = () => {
   const theme = useRecoilValue(themeState);
+  const navigation = useNavigation<AppNavigationProps>();
 
   const movieNowPlaying = fecthNowPlayingMovie();
   const movieProvider = fecthProviderMovie();
@@ -36,16 +39,23 @@ const Home = () => {
 
   useEffect(() => {
     console.log('Movies');
-    movieNowPlaying.reload();
-    movieProvider.reload();
-    movieTrending.reload();
-    popularPeople.reload();
-    moviePopular.reload();
-    movieTopRated.reload();
-    movieUpcomming.reload();
+    // movieNowPlaying.reload();
+    // movieProvider.reload();
+    // movieTrending.reload();
+    // popularPeople.reload();
+    // moviePopular.reload();
+    // movieTopRated.reload();
+    // movieUpcomming.reload();
   }, []);
 
-  if (movieNowPlaying.isLoading) {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log(movieNowPlaying.data?.results, movieProvider.data?.results);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (movieNowPlaying.isFetching) {
     return (
       <LoaderScreen
         message={'Please wait ..'}
@@ -70,6 +80,7 @@ const Home = () => {
       <Header title="Movies" />
       <ScrollView>
         <CarousalMovie data={movieNowPlaying.data?.results} />
+
         <ProviderMovie data={movieProvider.data?.results} />
         <GroupedMovie title="Trending" data={movieTrending.data?.results} />
         <PopularPeople data={popularPeople.data?.results} />

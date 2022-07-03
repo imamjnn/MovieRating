@@ -30,7 +30,11 @@ const Stack = createNativeStackNavigator<AppNavigationParams>();
 
 export const AppNavigation = () => (
   <Stack.Navigator
-    screenOptions={{headerTitleStyle: {fontFamily: fontFamily.fw500}, headerBackTitle: ''}}
+    screenOptions={{
+      headerTitleStyle: {fontFamily: fontFamily.fw500},
+      headerBackTitle: '',
+      animation: 'slide_from_right'
+    }}
     initialRouteName="AppIntro">
     <Stack.Screen name="AppIntro" component={AppIntro} options={{headerShown: false}} />
     <Stack.Screen
@@ -49,6 +53,7 @@ export type AppNavigationProps = NativeStackNavigationProp<AppNavigationParams>;
 // Tabs Navigation
 import Home from '@screens/home/Home';
 import Setting from '../screens/setting/Setting';
+import Search from '../screens/search/Search';
 
 export type DashboardTabParams = {
   Home: undefined;
@@ -85,7 +90,7 @@ const DashboardTabNavigator = () => {
         tabBarStyle: {backgroundColor: theme.background}
       })}>
       <DashboardTab.Screen name="Home" component={Home} options={{title: 'Movie'}} />
-      <DashboardTab.Screen name="Search" component={Setting} options={{title: 'Search'}} />
+      <DashboardTab.Screen name="Search" component={Search} options={{title: 'Search'}} />
       <DashboardTab.Screen name="Setting" component={Setting} options={{title: 'Setting'}} />
     </DashboardTab.Navigator>
   );

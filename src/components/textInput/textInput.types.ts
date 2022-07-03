@@ -11,4 +11,6 @@ export interface TextInputProps extends NativeTextInputProps {
   iconRight?: string;
   iconLeft?: string;
   secureTextEntry?: boolean;
+  backgroundColor?: string;
+  textColor?: string;
 }
