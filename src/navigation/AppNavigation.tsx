@@ -23,29 +23,36 @@ export type AppNavigationParams = {
   };
   MovieBy: {
     id: number;
+    title: string;
+    type: 'genre' | 'provider' | 'company';
   };
 };
 
 const Stack = createNativeStackNavigator<AppNavigationParams>();
 
-export const AppNavigation = () => (
-  <Stack.Navigator
-    screenOptions={{
-      headerTitleStyle: {fontFamily: fontFamily.fw500},
-      headerBackTitle: '',
-      animation: 'slide_from_right'
-    }}
-    initialRouteName="AppIntro">
-    <Stack.Screen name="AppIntro" component={AppIntro} options={{headerShown: false}} />
-    <Stack.Screen
-      name="DashboardTabNavigator"
-      component={DashboardTabNavigator}
-      options={{headerShown: false, animation: 'fade'}}
-    />
-    <Stack.Screen name="DetailMovie" component={DetailMovie} options={{headerShown: false}} />
-    <Stack.Screen name="MovieBy" component={MovieBy} options={{headerShown: true}} />
-  </Stack.Navigator>
-);
+export const AppNavigation = () => {
+  const theme = useRecoilValue(themeState);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleStyle: {fontFamily: fontFamily.fw500},
+        headerBackTitle: '',
+        animation: 'slide_from_right',
+        headerStyle: {backgroundColor: theme.background},
+        headerTintColor: theme.text
+      }}
+      initialRouteName="AppIntro">
+      <Stack.Screen name="AppIntro" component={AppIntro} options={{headerShown: false}} />
+      <Stack.Screen
+        name="DashboardTabNavigator"
+        component={DashboardTabNavigator}
+        options={{headerShown: false, animation: 'fade'}}
+      />
+      <Stack.Screen name="DetailMovie" component={DetailMovie} options={{headerShown: false}} />
+      <Stack.Screen name="MovieBy" component={MovieBy} options={{headerShown: true}} />
+    </Stack.Navigator>
+  );
+};
 
 export type AppNavigationProps = NativeStackNavigationProp<AppNavigationParams>;
 // End App Navigation

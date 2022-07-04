@@ -10,6 +10,8 @@ import {useRecoilValue} from 'recoil';
 import {ProductionCompanies} from '../detailMovie.types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {thousandSeparator} from '@root/src/utils/formatter';
+import {useNavigation} from '@react-navigation/native';
+import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
 
 type MoreDetailProps = {
   budget: number;
@@ -20,6 +22,7 @@ type MoreDetailProps = {
 
 const MoreDetail = ({prodCompanies, budget, revenue, isLoading = true}: MoreDetailProps) => {
   const theme = useRecoilValue(themeState);
+  const navigation = useNavigation<AppNavigationProps>();
 
   if (isLoading) {
     return <LoadingView />;
@@ -57,6 +60,9 @@ const MoreDetail = ({prodCompanies, budget, revenue, isLoading = true}: MoreDeta
           horizontal
           renderItem={({item}) => (
             <Chip
+              onPress={() =>
+                navigation.push('MovieBy', {id: item.id, title: item.name, type: 'company'})
+              }
               label={item.name}
               labelStyle={{color: theme.text}}
               iconSource={{uri: `${IMG_HOST}${item.logo_path}`}}

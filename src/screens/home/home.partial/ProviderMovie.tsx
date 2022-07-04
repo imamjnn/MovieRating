@@ -1,5 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
+import {useNavigation} from '@react-navigation/native';
 import {Text} from '@root/src/components';
+import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
 import React from 'react';
@@ -14,6 +16,7 @@ type ProviderMovieProps = {
 
 const ProviderMovie = ({data}: ProviderMovieProps) => {
   const theme = useRecoilValue(themeState);
+  const navigation = useNavigation<AppNavigationProps>();
   return (
     <View style={styles.container}>
       <View style={styles.wrapTitle}>
@@ -27,7 +30,15 @@ const ProviderMovie = ({data}: ProviderMovieProps) => {
         horizontal
         contentContainerStyle={{paddingLeft: 6, height: 80}}
         renderItem={({item}) => (
-          <Pressable style={styles.item}>
+          <Pressable
+            style={styles.item}
+            onPress={() =>
+              navigation.navigate('MovieBy', {
+                id: item.provider_id,
+                title: item.provider_name,
+                type: 'provider'
+              })
+            }>
             <Image source={{uri: `${IMG_HOST}${item.logo_path}`}} style={styles.imgBg} />
           </Pressable>
         )}

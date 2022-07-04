@@ -58,12 +58,12 @@ export const fecthTrendingMovie = () => {
   };
 };
 
-export const fecthProviderMovie = () => {
+export const fecthProviderMovie = (region: string) => {
   const client = useQueryClient();
 
   const {...rest} = useQuery<ProviderMovieData | null>(['fecthProviderMovie'], async () => {
     const response = await axios.get<ProviderMovieResponse>(
-      `${HOST}${endpoint.providerMovie}?api_key=${API_KEY}&language=id-ID&watch_region=ID`
+      `${HOST}${endpoint.providerMovie}?api_key=${API_KEY}&language=id-ID&watch_region=${region}`
     );
     if (response?.status !== 200) {
       return null;

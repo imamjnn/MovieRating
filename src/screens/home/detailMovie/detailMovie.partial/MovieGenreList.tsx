@@ -28,7 +28,7 @@ const MovieGenreList = ({data}: MovieGenreListProps) => {
           label={item.name}
           labelStyle={{color: colors.grey100}}
           containerStyle={{marginRight: 6}}
-          onPress={() => navigation.navigate('MovieBy', {id: item.id})}
+          onPress={() => navigation.push('MovieBy', {id: item.id, title: item.name, type: 'genre'})}
           backgroundColor={colors.primary}
         />
       )}

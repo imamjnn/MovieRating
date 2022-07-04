@@ -12,5 +12,6 @@ export const endpoint = {
   movie: '/movie',
   providerMovie: '/watch/providers/movie',
   popularMovie: '/movie/popular',
-  collectionMovie: '/collection'
+  collectionMovie: '/collection',
+  discoverMovie: '/discover/movie'
 };

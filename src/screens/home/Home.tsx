@@ -24,13 +24,16 @@ import {LoaderScreen} from 'react-native-ui-lib';
 import {colors} from '@root/src/themes';
 import {useNavigation} from '@react-navigation/native';
 import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
+import {deviceLocalize} from '@root/src/utils/models';
 
 const Home = () => {
   const theme = useRecoilValue(themeState);
   const navigation = useNavigation<AppNavigationProps>();
 
+  const localize = useRecoilValue(deviceLocalize);
+
   const movieNowPlaying = fecthNowPlayingMovie();
-  const movieProvider = fecthProviderMovie();
+  const movieProvider = fecthProviderMovie(localize.countryCode);
   const movieTrending = fecthTrendingMovie();
   const popularPeople = fecthPeoplePopular();
   const moviePopular = fecthPopularMovie();
