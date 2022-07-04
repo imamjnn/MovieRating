@@ -8,6 +8,7 @@ export default StyleSheet.create({
     height: 50,
     width: '100%',
     padding: 10,
-    justifyContent: 'center'
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });

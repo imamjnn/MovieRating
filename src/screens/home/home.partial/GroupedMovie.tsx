@@ -38,7 +38,7 @@ const GroupedMovie = ({title = 'Grouped', data, onPressMore}: GroupedMovieProps)
         contentContainerStyle={{paddingLeft: 10, height: 140}}
         renderItem={({item}) => (
           <Pressable
-            onPress={() => navigation.navigate('DetailMovie', {id: item.id})}
+            onPress={() => navigation.push('DetailMovie', {id: item.id})}
             style={styles.item}>
             <ImageBackground
               source={{uri: `${IMG_HOST}${item.poster_path}`}}

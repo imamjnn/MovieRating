@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import {RouteProp, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {Text} from '@root/src/components';
-import {AppNavigationParams} from '@root/src/navigation/AppNavigation';
+import {AppNavigationParams, AppNavigationProps} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
 import React, {useEffect, useRef, useState} from 'react';
 import {Animated, Image, ImageBackground, Pressable, View} from 'react-native';
@@ -32,6 +32,7 @@ import MovieCollection from './detailMovie.partial/MovieCollection';
 type DetailMovieRouteProps = RouteProp<AppNavigationParams, 'DetailMovie'>;
 
 const Setting = () => {
+  const navigation = useNavigation<AppNavigationProps>();
   const theme = useRecoilValue(themeState);
   const localize = useRecoilValue(deviceLocalize);
   const {params} = useRoute<DetailMovieRouteProps>();
@@ -39,9 +40,20 @@ const Setting = () => {
   const [overviewLess, setOverviewLess] = useState(true);
 
   const yOffset = useRef(new Animated.Value(0)).current;
-  const headerOpacity = yOffset.interpolate({
+  // const headerOpacity = yOffset.interpolate({
+  //   inputRange: [0, 200],
+  //   outputRange: [0, 1],
+  //   extrapolate: 'clamp'
+  // });
+  const headerColor = yOffset.interpolate({
     inputRange: [0, 200],
-    outputRange: [0, 1],
+    outputRange: ['transparent', theme.background],
+    extrapolate: 'clamp'
+  });
+
+  const titleColor = yOffset.interpolate({
+    inputRange: [0, 200],
+    outputRange: ['transparent', theme.text],
     extrapolate: 'clamp'
   });
 
@@ -87,13 +99,20 @@ const Setting = () => {
         style={[
           detailMovieStyles.header,
           {
-            opacity: headerOpacity,
-            backgroundColor: theme.background
+            // opacity: headerOpacity,
+            backgroundColor: headerColor
           }
         ]}>
-        <Text color={theme.text} center style={{fontSize: 18, fontWeight: 'bold'}}>
-          {detailMovie.data.title}
-        </Text>
+        <Pressable style={{width: '10%'}} onPress={() => navigation.pop()}>
+          <Icon name="arrow-back" size={20} color={colors.white} />
+        </Pressable>
+        <View style={{width: '90%'}}>
+          <Animated.Text
+            style={{fontSize: 18, fontWeight: 'bold', color: titleColor}}
+            numberOfLines={1}>
+            {detailMovie.data.title}
+          </Animated.Text>
+        </View>
       </Animated.View>
       <Animated.ScrollView
         style={{zIndex: 0}}
@@ -107,7 +126,7 @@ const Setting = () => {
               }
             }
           ],
-          {useNativeDriver: true}
+          {useNativeDriver: false}
         )}
         scrollEventThrottle={16}>
         <ImageBackground
@@ -182,7 +201,10 @@ const Setting = () => {
         />
         <MovieVideos data={movieVideo.data?.results} />
         {detailMovie.data.belongs_to_collection ? (
-          <MovieCollection collectionId={detailMovie.data.belongs_to_collection.id} />
+          <MovieCollection
+            collectionId={detailMovie.data.belongs_to_collection.id}
+            movieId={detailMovie.data.id}
+          />
         ) : null}
         <GroupedMovie title="Similar Movie" data={movieSimilar.data?.results} />
       </Animated.ScrollView>

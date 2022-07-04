@@ -11,12 +11,20 @@ import {fecthCollectionMovie} from '../detailMovie.model';
 
 type MovieCollectionProps = {
   collectionId: number;
+  movieId: number;
 };
 
-const MovieCollection = ({collectionId}: MovieCollectionProps) => {
+const MovieCollection = ({collectionId, movieId}: MovieCollectionProps) => {
   const navigation = useNavigation<AppNavigationProps>();
   const theme = useRecoilValue(themeState);
   const collectionMovie = fecthCollectionMovie(collectionId);
+
+  const onPressItem = (id: number) => {
+    if (id !== movieId) {
+      navigation.push('DetailMovie', {id: id});
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text color={theme.text} paddingVertical={10} style={{paddingLeft: 10, fontWeight: 'bold'}}>
@@ -34,13 +42,13 @@ const MovieCollection = ({collectionId}: MovieCollectionProps) => {
           renderItem={({item}) => (
             <Pressable
               style={[styles.item, {backgroundColor: theme.foreground}]}
-              onPress={() => navigation.push('DetailMovie', {id: item.id})}>
+              onPress={() => onPressItem(item.id)}>
               <Image source={{uri: `${IMG_HOST}${item.poster_path}`}} style={styles.img} />
               <View style={styles.wrapTitle}>
                 <Text
                   color={theme.text}
                   center
-                  style={{fontSize: 11, fontWeight: 'bold'}}
+                  style={{fontSize: 12, fontWeight: 'bold'}}
                   numberOfLines={2}>
                   {item.title}
                 </Text>
@@ -71,15 +79,16 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 6
   },
   item: {
-    height: 190,
+    height: 200,
     width: 100,
     marginRight: 10,
     borderRadius: 6,
     elevation: 6
   },
   wrapTitle: {
-    height: 50,
+    height: 60,
     alignItems: 'center',
+    justifyContent: 'center',
     paddingH: 6
   }
 });
