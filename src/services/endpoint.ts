@@ -10,6 +10,7 @@ export const endpoint = {
   upcomingMovie: '/movie/upcoming',
   searchMovie: '/search/movie',
   movie: '/movie',
+  person: '/person',
   providerMovie: '/watch/providers/movie',
   popularMovie: '/movie/popular',
   collectionMovie: '/collection',

@@ -2,6 +2,7 @@
 import {Text} from '@root/src/components';
 import {themeState} from '@root/src/screens/setting/setting.model';
 import {IMG_HOST} from '@root/src/services/api';
+import {colors} from '@root/src/themes';
 import React from 'react';
 import {FlatList, Image, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
@@ -35,6 +36,9 @@ const MovieCast = ({data}: MovieCastProps) => {
             />
             <Text color={theme.text} style={{fontSize: 11}} center numberOfLines={2}>
               {item.name}
+            </Text>
+            <Text color={colors.grey400} style={{fontSize: 10}} center numberOfLines={2}>
+              ({item.character})
             </Text>
           </View>
         )}

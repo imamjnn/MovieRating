@@ -103,7 +103,6 @@ export type MovieVideoData = {
 export type MovieVideoResponse = ResponseAPI<MovieVideoData>;
 
 // movie collection
-
 export type MovieCollectionData = {
   id: number;
   name: string;

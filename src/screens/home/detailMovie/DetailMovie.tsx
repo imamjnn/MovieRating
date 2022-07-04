@@ -28,6 +28,7 @@ import MoreDetail from './detailMovie.partial/MoreDetail';
 import detailMovieStyles from './detailMovie.styles';
 import globalStyles from '@root/src/themes/globalStyles';
 import MovieCollection from './detailMovie.partial/MovieCollection';
+import LinearGradient from 'react-native-linear-gradient';
 
 type DetailMovieRouteProps = RouteProp<AppNavigationParams, 'DetailMovie'>;
 
@@ -104,7 +105,7 @@ const Setting = () => {
           }
         ]}>
         <Pressable style={{width: '10%'}} onPress={() => navigation.pop()}>
-          <Icon name="arrow-back" size={20} color={colors.white} />
+          <Icon name="arrow-back" size={20} color={theme.text} />
         </Pressable>
         <View style={{width: '90%'}}>
           <Animated.Text
@@ -139,8 +140,12 @@ const Setting = () => {
             height: 200,
             width: '100%',
             justifyContent: 'flex-end'
-          }}
-        />
+          }}>
+          <LinearGradient
+            colors={['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', theme.background]}
+            style={{height: 200, width: '100%'}}
+          />
+        </ImageBackground>
         <View style={{marginTop: -50, flexDirection: 'row'}}>
           <View style={{width: '30%', paddingLeft: 10}}>
             <Image
@@ -186,7 +191,7 @@ const Setting = () => {
         </View>
         <View style={{padding: 10}}>
           <Pressable onPress={() => setOverviewLess(!overviewLess)}>
-            <Text color={theme.text} numberOfLines={overviewLess ? 4 : 0}>
+            <Text color={colors.grey400} numberOfLines={overviewLess ? 4 : 0}>
               {detailMovie.data.overview}
             </Text>
           </Pressable>

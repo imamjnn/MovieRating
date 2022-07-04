@@ -13,12 +13,16 @@ import {Icon} from '../components';
 // App Navigation
 import AppIntro from '@screens/AppIntro';
 import DetailMovie from '@screens/home/detailMovie/DetailMovie';
+import DetailPeople from '@screens/home/detailPeople/DetailPeople';
 import MovieBy from '@screens/home/movieBy/MovieBy';
 
 export type AppNavigationParams = {
   AppIntro: undefined;
   DashboardTabNavigator: undefined;
   DetailMovie: {
+    id: number;
+  };
+  DetailPeople: {
     id: number;
   };
   MovieBy: {
@@ -49,6 +53,7 @@ export const AppNavigation = () => {
         options={{headerShown: false, animation: 'fade'}}
       />
       <Stack.Screen name="DetailMovie" component={DetailMovie} options={{headerShown: false}} />
+      <Stack.Screen name="DetailPeople" component={DetailPeople} options={{headerShown: false}} />
       <Stack.Screen name="MovieBy" component={MovieBy} options={{headerShown: true}} />
     </Stack.Navigator>
   );

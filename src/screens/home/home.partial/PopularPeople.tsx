@@ -1,9 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
+import {useNavigation} from '@react-navigation/native';
 import {Text} from '@root/src/components';
+import {AppNavigationProps} from '@root/src/navigation/AppNavigation';
 import {IMG_HOST} from '@root/src/services/api';
 import {colors} from '@root/src/themes';
 import React from 'react';
-import {FlatList, Image, StyleSheet, View} from 'react-native';
+import {FlatList, Image, Pressable, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {themeState} from '../../setting/setting.model';
 import {PeoplePopularResults} from '../home.types';
@@ -14,6 +16,7 @@ type PopularPeopleProps = {
 
 const PopularPeople = ({data}: PopularPeopleProps) => {
   const theme = useRecoilValue(themeState);
+  const navigation = useNavigation<AppNavigationProps>();
   return (
     <View style={styles.container}>
       <View style={{padding: 6}}>
@@ -24,7 +27,9 @@ const PopularPeople = ({data}: PopularPeopleProps) => {
         data={data}
         horizontal
         renderItem={({item}) => (
-          <View style={styles.item}>
+          <Pressable
+            onPress={() => navigation.navigate('DetailPeople', {id: item.id})}
+            style={styles.item}>
             <Image
               source={{uri: `${IMG_HOST}/${item.profile_path}`}}
               style={[styles.imgBg, {backgroundColor: theme.foreground}]}
@@ -32,7 +37,7 @@ const PopularPeople = ({data}: PopularPeopleProps) => {
             <Text color={colors.white} style={styles.nameText} center numberOfLines={2}>
               {item.name}
             </Text>
-          </View>
+          </Pressable>
         )}
       />
     </View>
