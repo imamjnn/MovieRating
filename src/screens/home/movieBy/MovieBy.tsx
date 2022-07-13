@@ -35,7 +35,7 @@ const MovieBy = () => {
   const {isFetching, data, reload, fetchNextPage} = fetchDiscoverMovie(queryString);
 
   useEffect(() => {
-    navigation.setOptions({title: `${params.title} Movies`});
+    navigation.setOptions({title: `${params.title}`});
   }, [navigation]);
 
   const mergeData = data?.pages

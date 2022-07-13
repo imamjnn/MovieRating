@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {LoadingView, Text} from '@root/src/components';
 import {AppNavigationParams} from '@root/src/navigation/AppNavigation';
